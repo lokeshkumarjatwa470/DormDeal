@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Secure the /items collection
+    match /items/{itemId} {
+      
+      // Allow read and write operations only if:
+      // 1. The user is authenticated (request.auth != null)
+      // 2. The user's authenticated email exactly ends with '@nitj.ac.in'
+      allow read, write: if request.auth != null && 
+                            request.auth.token.email.matches(".*@nitj\\.ac\\.in$");
+    }
+  }
+}
